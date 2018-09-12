@@ -46,9 +46,9 @@ Then the following jq filters will extract the information
 8. jq '[.delegated_contracts[]] | unique | length' test.json : Number of unique addresses delegating
 
 The previous RPC gets the information about the head block the following RPC gets the information from a block an integer number (in this case 60 000 levels) before the head.
-./tezos-client rpc get /chains/main/blocks/head~60000/context/delegates/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don > test.json
-You can also put a block-id like BM4TJHwLhjNz2UkiMwAb2He9gr7LcxG5bkNsPqyw4zGd18sc6wy~60000 instead of head.
-Notice its a tilde sign ~ not a minus sign -
+./tezos-client rpc get /chains/main/blocks/head\~60000/context/delegates/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don > test.json
+You can also put a block-id like BM4TJHwLhjNz2UkiMwAb2He9gr7LcxG5bkNsPqyw4zGd18sc6wy\~60000 instead of head.
+Notice its a tilde sign \~ not a minus sign -
 
 The following bash script automates the procedure
 This bash script automates the procedure (need to do sudo chmod a+x 'filename')
