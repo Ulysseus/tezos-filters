@@ -53,14 +53,14 @@ Notice its a tilde sign \~ not a minus sign -
 The following bash script automates the procedure
 This bash script automates the procedure (need to do sudo chmod a+x 'filename')
 
-#!/bin/sh
-i=0
-while true
-do
-i=$((i+10000))
-sleep 10
-./tezos-client rpc get /chains/main/blocks/head~$i/context/delegates/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don >> test.js$
-done
+#!/bin/sh /n
+i=0/n
+while true/n
+do/n
+i=$((i+10000))/n
+sleep 10/n
+./tezos-client rpc get /chains/main/blocks/head~$i/context/delegates/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don >> test.js/n
+done/n
 
 I use script like this to jump back a cycle at a time to calculate what delegates I have and therefore what rewards are due to each.
 I have not put the script up, I am not absolutely certain its right :-), but you get the idea.
