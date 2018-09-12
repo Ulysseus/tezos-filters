@@ -1,0 +1,7 @@
+#!/bin/sh  
+while true  
+do  
+$HOME/tezos/./tezos-client rpc get /network/peers?filter='running' >> test.json 
+sleep 3000  
+done
+

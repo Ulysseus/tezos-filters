@@ -1,0 +1,8 @@
+#!/bin/sh
+i=0
+while true
+do
+i=$((i+10000))
+sleep 10
+./tezos-client rpc get /chains/main/blocks/head~$i/context/delegates/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don >> test.json
+done
