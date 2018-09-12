@@ -1,4 +1,5 @@
-Some filters that can be used with jq
+I run a delgation service https://youloafwebake.io I have written the following filters that can be used with jq to help me monitor my node and Baking service
+
 jq is a utility for reading JSON output https://stedolan.github.io/jq/
 Tezos offers some RPC commands that return a JSON object of information from the running node.
 jq allows one to filter the results into a more usable form, this can then be used in a bash script to help with monitoring of the node.
