@@ -1,4 +1,4 @@
-I run a delgation service https://youloafwebake.io I have written the following filters that can be used with jq to help me monitor my node and Baking service
+I run a small baking service https://youloafwebake.io, I hope some of the following filters may be useful to anyone baking
 
 jq is a utility for reading JSON output https://stedolan.github.io/jq/
 Tezos offers some RPC commands that return a JSON object of information from the running node.
@@ -6,7 +6,7 @@ jq allows one to filter the results into a more usable form, this can then be us
 I use Mathematica for most of my work, but my node runs in Ubuntu 18.04, the rest of the time I use a Mac.
 I hope these filters are useful to people
 
-First a few thing > and >> in Ubuntu mean redirect output; > means overwrite >> means append to end of file.
+First a few things > and >> in Ubuntu mean redirect output; > means overwrite >> means append to end of file.
 So the command <do something> > <filename> will redirect the output of <do something> to <filename>. >> would append the output to <filename>.
 The following link has all the RPCs currently available
 https://tezos.gitlab.io/betanet/api/rpc.html
@@ -30,10 +30,9 @@ sleep 3000
 
 done
 
-Saving this as file say check_peers and then adding executable status for all users by typing sudo chmod a+x check_peers.
-The script is then run buy typing ./check_peers in a new terminal window.
+Saving this as file as say check_peers and then adding executable status for all users by typing sudo chmod a+x check_peers.
+The script is then run by typing ./check_peers in a new terminal window.
 
-I run a small baking service youloafwebake.io, I hope some of the following filters may be useful to anyone baking
 
 The following RPC will return the number of unique bakers in cycle 21:
 ./tezos-client rpc get /chains/main/blocks/head/helpers/baking_rights?'cycle=21&max_priority=1'| jq '[.[].delegate] | unique | length'
