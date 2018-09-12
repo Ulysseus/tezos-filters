@@ -19,10 +19,15 @@ By running the RPC every few minutes on the node I can record a log of the activ
 To do this I use a bash script like follows
 
 #!/bin/sh
+
 while true
+
 do
+
 $HOME/tezos/./tezos-client rpc get /network/peers?filter='running' >> test.json
+
 sleep 3000
+
 done
 
 Saving this as file say check_peers and then adding executable status for all users by typing sudo chmod a+x check_peers.
@@ -53,14 +58,20 @@ Notice its a tilde sign \~ not a minus sign -
 The following bash script automates the procedure
 This bash script automates the procedure (need to do sudo chmod a+x 'filename')
 
-#!/bin/sh /n
-i=0/n
-while true/n
-do/n
-i=$((i+10000))/n
-sleep 10/n
-./tezos-client rpc get /chains/main/blocks/head~$i/context/delegates/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don >> test.js/n
-done/n
+#!/bin/sh 
+
+i=0
+
+while true
+
+do
+
+i=$((i+10000))
+
+sleep 10
+$HOME/tezos/./tezos-client rpc get /chains/main/blocks/head~$i/context/delegates/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don >> test.js
+
+done
 
 I use script like this to jump back a cycle at a time to calculate what delegates I have and therefore what rewards are due to each.
 I have not put the script up, I am not absolutely certain its right :-), but you get the idea.
