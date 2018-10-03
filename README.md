@@ -121,6 +121,7 @@ jq -r  '.|map([.level,.delegate,.estimated_time,(.slots|.[])])|.[] |@csv' node_e
 
 Some filters for tzscan
 Read Data
+
 curl --fail --silent --show-error https://api6.tzscan.io/v2/rewards_split/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don?cycle=$myCycle > tzscan_rewards_split.json
 
 Write Headings
