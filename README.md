@@ -79,3 +79,41 @@ Network filters
 ./tezos-client rpc get /network/connections > test.json
 1. jq '.[].peer_id' test.json : Gives list of connected peers
 2. jq '.[].id_point' test.json : Gives list in same order as before of IP and port Number
+
+More on Baking Rights
+./tezos-client rpc get /chains/main/blocks/head/helpers/baking_rights?"cycle=$myCycle&delegate=tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don&max_priority=2" > node_baking_rights.json
+Previous command will get the data from the node about baking
+Now lets filter it to a csv file
+First lets write some Headings
+
+jq  -r '.[-1]| keys_unsorted|@csv'  node_baking_rights.json > node_baking_rights.csv
+
+then append the data
+jq -r  '.|map([.level,.delegate,.priority,.estimated_time])|.[] | @csv' node_baking_rights.json >> node_baking_rights.csv
+
+Now for Past Data
+./tezos-client rpc get /chains/main/blocks/head/context/delegates/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don > node_past_rewards.json
+
+Write headers
+jq  -r '.frozen_balance_by_cycle[0]| keys|@csv' node_past_rewards.json > node_past_rewards.csv
+Append Data
+jq -r  '[.frozen_balance_by_cycle[]]|map([(.cycle),(.deposit|tonumber),(.fees|tonumber),(.rewards|tonumber)])|.[] | @csv' node_past_rewards.json >> node_past_rewards.csv 
+
+Endorsing rights
+./tezos-client rpc get /chains/main/blocks/head/helpers/endorsing_rights?"cycle=$myCycle&delegate=tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don" > node_endorsing_rights.json
+
+Write Headings
+jq -r '[.[-1]|keys_unsorted[]]|[.[0],.[1],.[3],.[2]]|@csv' node_endorsing_rights.json > node_endorsing_rights.csv
+
+Append Data
+jq -r  '.|map([.level,.delegate,.estimated_time,(.slots|.[])])|.[] |@csv' node_endorsing_rights.json >> node_endorsing_rights.csv
+
+Some filters for tzscan
+Read Data
+curl --fail --silent --show-error https://api6.tzscan.io/v2/rewards_split/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don?cycle=$myCycle > tzscan_rewards_split.json
+
+Write Headings
+echo "Contract", "Balance", "Cycle", $myCycle > tzscan_contract_balances.csv
+Append Data
+jq -r '[.delegators_balance[]]|map([.[0].tz,(.[1]|tonumber)])|.[]|@csv' tzscan_rewards_split.json >> tzscan_contract_balances.csv
+
