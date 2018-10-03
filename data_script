@@ -1,0 +1,74 @@
+#!/bin/sh
+# Next line stops disclaimer
+alias mainnet='TEZOS_CLIENT_UNSAFE_DISABLE_DISCLAIMER=Y ./tezos-client --addr 127.0.0.1 --port 8732'
+
+#while true
+#do
+
+myCycle=$(mainnet rpc get /chains/main/blocks/head/helpers/levels_in_current_cycle | jq '.first/4096 | floor')
+
+date
+echo cycle =  $myCycle
+
+
+# Node stuff
+
+#Baking rights
+ mainnet rpc get /chains/main/blocks/head/helpers/baking_rights?"cycle=$myCycle&delegate=tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don&max_priority=2" > node_baking_rights.json
+sleep 5
+#Write headers
+jq  -r '.[-1]| keys_unsorted|@csv'  node_baking_rights.json > node_baking_rights.csv 
+#Append data
+jq -r  '.|map([.level,.delegate,.priority,.estimated_time])|.[] | @csv' node_baking_rights.json >> node_baking_rights.csv
+
+
+#Past Data
+
+#Read data
+mainnet rpc get /chains/main/blocks/head/context/delegates/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don > node_past_rewards.json
+sleep 5
+#Write headers
+jq  -r '.frozen_balance_by_cycle[0]| keys|@csv' node_past_rewards.json > node_past_rewards.csv
+#Append data
+jq -r  '[.frozen_balance_by_cycle[]]|map([(.cycle),(.deposit|tonumber),(.fees|tonumber),(.rewards|tonumber)])|.[] | @csv' node_past_rewards.json >> node_past_rewards.csv 
+
+
+#Endorsing Rights
+#Read data
+mainnet rpc get /chains/main/blocks/head/helpers/endorsing_rights?"cycle=$myCycle&delegate=tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don" > node_endorsing_rights.json
+sleep 5
+#Write headers
+jq -r '[.[-1]|keys_unsorted[]]|[.[0],.[1],.[3],.[2]]|@csv' node_endorsing_rights.json > node_endorsing_rights.csv
+#Append Data
+jq -r  '.|map([.level,.delegate,.estimated_time,(.slots|.[])])|.[] |@csv' node_endorsing_rights.json >> node_endorsing_rights.csv
+
+
+#tzscan
+
+#Rewards Split by Cycles
+
+#Read Data
+curl --fail --silent --show-error  https://api6.tzscan.io/v2/rewards_split_cycles/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don > tzscan_rewards_split_cycles.json
+
+#Write Headers
+jq -r '.[-1]|keys_unsorted|@csv' tzscan_rewards_split_cycles.json > tzscan_rewards_split_cycles.csv
+#Append Data
+jq -r '.|map([.cycle,.delegate_staking_balance,.delegators_nb,.delegated_balance,.blocks_rewards,.endorsements_rewards,.fees,.future_baking_rewards,.future_endorsing_rewards,.status.status,.gain_from_denounciation,.lost_deposit_from_denounciation,.lost_rewards_denounciation,.lost_fees_denounciation])|.[]|@csv' tzscan_rewards_split_cycles.json >> tzscan_rewards_split_cycles.csv
+
+
+
+#Delegators Address Balance given a cycle
+
+#Read Data
+curl --fail --silent --show-error https://api6.tzscan.io/v2/rewards_split/tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don?cycle=$myCycle > tzscan_rewards_split.json
+
+#Write Headers
+
+echo "Contract", "Balance", "Cycle", $myCycle > tzscan_contract_balances.csv
+
+#Apppend Data
+
+jq -r '[.delegators_balance[]]|map([.[0].tz,(.[1]|tonumber)])|.[]|@csv' tzscan_rewards_split.json >> tzscan_contract_balances.csv
+
+sleep 83000
+#done
