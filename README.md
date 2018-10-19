@@ -113,7 +113,8 @@ jq -r  '[.frozen_balance_by_cycle[]]|map([(.cycle),(.deposit|tonumber),(.fees|to
 ```
 
 # Endorsing rights
-```./tezos-client rpc get /chains/main/blocks/head/helpers/endorsing_rights?"cycle=$myCycle&delegate=tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don" > node_endorsing_rights.json
+```
+./tezos-client rpc get /chains/main/blocks/head/helpers/endorsing_rights?"cycle=$myCycle&delegate=tz1eZwq8b5cvE2bPKokatLkVMzkxz24z3Don" > node_endorsing_rights.json
 ```
 
 ## Write Headings
