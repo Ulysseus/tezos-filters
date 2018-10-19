@@ -13,7 +13,7 @@ https://tezos.gitlab.io/betanet/api/rpc.html
 
 The following RPC ./tezos-client rpc get /network/peers?filter='running' >> test.json
 appends a list of running peers to test.json
-The command `jq '[.[][0]] | length' test.json will return the number of running peers, I use this command to determine if the running peer count ever drops to zero.
+The command `jq '[.[][0]] | length' test.json` will return the number of running peers, I use this command to determine if the running peer count ever drops to zero.
 By running the RPC every few minutes on the node I can record a log of the active peer count.
 
 To do this I use a bash script like follows
